@@ -3,7 +3,7 @@ source("../misc_functions/embed_and_align.R")
 source("../misc_functions/align.R")
 
 set.seed(472022)
-ns <-  eq(200,1000,100)
+ns <-  seq(200,1000,100)
 epsilons <- seq(0 ,.3,.1)
 #ns <- c(100,200)
 toreturns <- list()
