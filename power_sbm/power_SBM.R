@@ -3,7 +3,7 @@ source("../misc_functions/embed_and_align.R")
 source("../misc_functions/align.R")
 
 set.seed(472022)
-ns <-  seq(200,1000,100)
+ns <-  eq(200,1000,100)
 epsilons <- seq(0 ,.3,.1)
 #ns <- c(100,200)
 toreturns <- list()
@@ -17,7 +17,6 @@ for (epses in c(1:length(epsilons))) {
   for (vals in c(1:length(ns))) {
     toreturns[[epses]][[vals]] <- list()
     n <- ns[vals]
-    print(paste("n = ",n," eps = ",eps))
     m <- n
     B <- diag(a-b,d) + matrix(b,d,d)
     B2 <- B + diag(eps,d)
@@ -31,7 +30,9 @@ for (epses in c(1:length(epsilons))) {
     p <- 1
     toReturn <- rep(0,nsims)
     for (iter in c(1:nsims)) {
-      print(paste0("iter = ",iter))
+      print(paste0("iter = ",iter, " of ",max(nsims)
+                   ,", n = ",n," of ",max(ns),
+                   ", eps = ",eps," of ",max(epses)))
       assignmentvector1 <- rmultinom(n,1,pis)
       assignmentvector2 <- rmultinom(m,1,pis)
       Xtrue <-t(assignmentvector1) %*% nus_true1
@@ -46,7 +47,7 @@ for (epses in c(1:length(epsilons))) {
       
       #Qinit <- get_sign(Xhat,Yhat)
       #Qinit2 <- Qinit[c((p+1):d),c((p+1):d)]
-      Q <- align_embeddings(Xhat,Yhat,p=1,q=d-p,lambda=.0001,eps=.001,niter=200,loss="kernel")
+      Q <- align_matrices_cheap(Xhat,Yhat,lambda=.0001,eps=.001,niter=200)
       #Q <- OTP(Xhat[,c((p+1):d)],Yhat[,c((p+1):d)],Qinit=Qinit2,lambda=.0001,eps=.0001,niter=300)
       #Xnew <- Xhat%*% bdiag(Qinit[1,1],Q)
       Xnew <- Xhat %*% Q
@@ -62,7 +63,7 @@ names(toreturns) <- epsilons
 
 
 
-save(toreturns,file = "power_sbm_4-8.Rdata")
+save(toreturns,file = "power_sbm_5-10.Rdata")
 # 
 #  
 # load("power1_4-6.Rdata")

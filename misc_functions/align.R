@@ -90,6 +90,32 @@ OTP <- function(Xhat,Yhat,Qinit = NULL,lambda=.1,eps=.01,niter=100) {
   return(list(Q = Q,Pi=Pi,obj.value =obj.value))
 }
 
+#function to align over sign matrices but only find the smallest initialization
+#assumes p = 1, q = d-1
+align_matrices_cheap <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100) {
+  #find Qinit
+  d <- dim(Xhat)[2]
+  ds <- list()
+  for (c in 1:d) {
+    ds[[c]] <- c(-1,1)
+  }
+  signs <- expand.grid(ds)
+  obj.values <- rep(0,nrow(signs))
+  
+  for (allsigns in c(1:nrow(signs))) {
+      obj.values[allsigns] <- kernel.stat(Xhat %*% diag(signs[allsigns,]),Yhat)
+  }
+
+  Qinit <- diag(signs[which.min(obj.values),])
+  Qinit2 <- Qinit[c(2:d),c(2:d)]
+  
+  #now OTP along negative parts:
+  toReturn <- OTP(Xhat[,c(2:d)],Yhat[,c(2:d)],Qinit =Qinit2,lambda=lambda,eps=eps,niter=niter)
+  return(bdiag(Qinit[1,1],toReturn$Q))
+}
+
+
+
 #function to initialize at all sign matrices
 align_matrices <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100,toPrint = FALSE,loss="OTP") {
   ds <- list()

@@ -1,7 +1,0 @@
-Fatal error: cannot open file 'power_DCSBM.R': No such file or directory
-Loading required package: Matrix
-[1] "n =  200  eps =  0"
-[1] "iter = 1"
-Error in diag(dgcorrects) %*% t(assignmentvector2) : 
-  non-conformable arguments
-Execution halted

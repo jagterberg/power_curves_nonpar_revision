@@ -3,9 +3,9 @@ source("../misc_functions/embed_and_align.R")
 source("../misc_functions/align.R")
 
 set.seed(472022)
-ns <-  seq(200,1000,100)
+ns <- seq(200,1000,100)
 epsilons <- seq(0 ,.3,.1)
-sparsities <- seq(.05,.2,.05)
+sparsities <-  seq(.05,.2,.05)
 #ns <- c(100,200)
 toreturns <- list()
 d <- 3
@@ -39,11 +39,13 @@ for (epses in c(1:length(epsilons))) {
       toreturns[[epses]][[vals]][[y]] <- list()
       toReturn <- rep(0,nsims)
       for (iter in c(1:nsims)) {
-        print(paste0("iter = ",iter))
+        print(paste0("iter = ",iter, " of ",max(nsims)
+                     ,", n = ",n," of ",max(ns),
+                     ", eps = ",eps," of ",max(epsilons)))
         assignmentvector1 <- rmultinom(n,1,pis)
         assignmentvector2 <- rmultinom(m,1,pis)
         Xtrue <-t(assignmentvector1) %*% nus_true1
-        dgcorrects <- runif(.5-eps,.5+eps,m)
+        dgcorrects <- runif(m,.5-eps,.5+eps)
         Ytrue <-  diag(dgcorrects) %*% t(assignmentvector2) %*% nus_true2
         P1 <- Xtrue %*%Ipq %*% t(Xtrue)
         P2 <- Ytrue %*% Ipq %*% t(Ytrue)
@@ -57,7 +59,7 @@ for (epses in c(1:length(epsilons))) {
         Yhat <- Yhat/sqrt(betahat)
         rm(A,C,P1,P2)
         
-        Q <- align_embeddings(Xhat,Yhat,p=1,q=d-p,lambda=.0001,eps=.001,niter=200,loss="kernel")
+        Q <- align_matrices_cheap(Xhat,Yhat,lambda=.0001,eps=.001,niter=200)
         Xnew <- Xhat %*% Q
         #run test:
         test <- nonpar.test(Xnew,Yhat,nsims=1000)
@@ -72,4 +74,4 @@ for (epses in c(1:length(epsilons))) {
 }
 names(toreturns) <- epsilons
 
-save(file="power_dcsbm_sparse_4-8.Rdata")
+save(file="power_dcsbm_sparse_5-10.Rdata")
