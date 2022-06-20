@@ -3,8 +3,8 @@ source("../misc_functions/embed_and_align.R")
 source("../misc_functions/align.R")
 
 set.seed(482022)
-ns <- seq(200,1000,100)
-epsilons <- seq(0 ,.3,.1)
+ns <- seq(200,800,200)
+epsilons <- seq(0 ,.2,.1)
 sparsities <- seq(.05,.2,.05)
 #ns <- c(100,200)
 toreturns <- list()
@@ -52,16 +52,16 @@ for (epses in c(1:length(epsilons))) {
       Xhat <- Xhat/ sqrt(alphahat)
       Yhat <- Yhat/sqrt(betahat)
       rm(A,C,P1,P2)
-      Q <- align_matrices_cheap(Xhat,Yhat,lambda=.0001,eps=.001,niter=200)
+      Q <- align_matrices(Xhat,Yhat,lambda=.5,eps=.1,niter=20)
       Xnew <- Xhat %*% Q
       #run test:
-      test <- nonpar.test(Xnew,Yhat,nsims=1000)
+      test <- nonpar.test(Xnew,Yhat,nsims=500)
       toreturns[[epses]][[vals]][[iter]] <- test
       
     }
   } 
 }
-save(toreturns,file = "power_dcsbm_5-10.Rdata")
+save(toreturns,file = "power_dcsbm_6-20.Rdata")
 
 
 

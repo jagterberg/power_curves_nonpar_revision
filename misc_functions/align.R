@@ -50,6 +50,15 @@ procrustes <- function(X,Y) {
    return(vals$u %*% t(vals$v))
 }
 
+opq_project <- function(Q,p=1) {
+  d  <- dim(Q)[1]
+  Qp <- Q[c(1:p),c(1:p)]
+  Qq <- Q[c((p+1):d),c((p+1):d)]
+  svd1 <- svd(Qp)
+  svd2 <- svd(Qq)
+  return(bdiag(svd1$u%*%svd1$v,svd2$u%*%svd2$v))
+}
+
 
 #get sign matrix
 get_sign <- function(Xhat,Yhat) {
@@ -118,49 +127,41 @@ align_matrices_cheap <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100) {
 
 #function to initialize at all sign matrices
 align_matrices <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100,toPrint = FALSE,loss="OTP") {
+  d <- dim(Xhat)[2]
   ds <- list()
-  results <- list()
-  p <- dim(Xhat)[2]
-  
-  if (p > 1) {
-    for ( c in 1:p) {
-      ds[[c]] <- c(-1,1)
-    }
-    signs <- expand.grid(ds)
-    obj.values <- rep(0,nrow(signs))
-    for (allsigns in c(1:nrow(signs))) {
-      if(toPrint) {
-        print(paste("On sign matrix",allsigns," of ",nrow(signs)))
-      }
-      results[[allsigns]] <- OTP(Xhat,Yhat,Qinit = diag(signs[allsigns,]),
-                                 lambda=lambda,eps=eps,niter=niter)
-      if(loss == "OTP") {
-        obj.value <- results[[allsigns]]['obj.value']
-      } else {
-        obj.value <- kernel.stat(Xhat %*% results[[allsigns]]$Q,Yhat)
-      }
-      
-    }
+  for (c in 1:d) {
+    ds[[c]] <- c(-1,1)
+  }
+  signs <- expand.grid(ds)
+  obj.values1 <- rep(0,nrow(signs))
+  obj.values2 <- rep(0,nrow(signs))
+  obj.values3 <- rep(0,nrow(signs))
+  Q_news <- list()
+  Q_news2 <- list()
+  for (allsigns in c(1:nrow(signs))) {
+    obj.values1[allsigns] <- kernel.stat(Xhat %*% diag(signs[allsigns,]),Yhat)
+    Qinit1 <- diag(signs[allsigns,])
+    Qinit2 <- Qinit1[c(2:d),c(2:d)]
+    Q_news[[allsigns]] <- OTP(Xhat[,c(2:d)],Yhat[,c(2:d)],Qinit =Qinit2,lambda=lambda,eps=eps,niter=niter)
+    obj.values2[allsigns] <- kernel.stat(Xhat %*% bdiag(Qinit1[1,1],Q_news[[allsigns]]$Q),Yhat)
+    Q_news2[[allsigns]] <- OTP(Xhat,Yhat,Qinit = Qinit1,lambda=lambda,eps=eps,niter=niter)
+    Q_news2[[allsigns]] <- opq_project(Q_news2[[allsigns]]$Q)
+    obj.values3[allsigns] <- kernel.stat(Xhat %*% Q_news2[[allsigns]],Yhat)
     
-    if (loss == "OTP") {
-      Qfinal <- results[[which.min(obj.value)]]['Q']
-      return(Qfinal)
-    } else {
-      return(results)
-    }
-    
-  } else {
-    signs <- c(1,-1)
-    results1 <- OTP(Xhat,Yhat,Qinit=1,lambda=.1,eps=.1,niter=5)
-    results2 <- OTP(Xhat,Yhat,Qinit = -1,lambda=.1,eps=.1,niter=5)
-    if (results1[['obj.value']] < results2[['obj.value']]) {
-      Qfinal <- 1
-    } else {
-      Qfinal <- -1
-    }
-    return(Qfinal)
   }
   
- 
-  
+  if (min(obj.values1) < min(obj.values2) & min(obj.values1) < min(obj.values3)) {
+    return(diag(signs[which.min(obj.values1),])) 
+  } else if (min(obj.values2) < min(obj.values3)) {
+    minwhich <- which.min(obj.values2)
+    q1 <- diag(signs[minwhich,])[1,1]
+    Q2 <- Q_news[[minwhich]]$Q
+    return(
+      bdiag(q1,Q2)
+    )
+  } else {
+    minwhich <- which.min(obj.values3)
+    return(Q_news2[[minwhich]])
+  }
+
 }
