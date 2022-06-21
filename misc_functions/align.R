@@ -56,7 +56,7 @@ opq_project <- function(Q,p=1) {
   Qq <- Q[c((p+1):d),c((p+1):d)]
   svd1 <- svd(Qp)
   svd2 <- svd(Qq)
-  return(bdiag(svd1$u%*%svd1$v,svd2$u%*%svd2$v))
+  return(bdiag(svd1$u%*%t(svd1$v),svd2$u%*%t(svd2$v)))
 }
 
 
