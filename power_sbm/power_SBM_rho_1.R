@@ -10,7 +10,7 @@ if(!require(doParallel)) {
   library(doParallel)
 }
 numcores<- detectCores()
-cl <- makeCluster(4)
+cl <- makeCluster(4,type = "FORK")
 registerDoParallel(cl,numcores)
 source("sbm_fun.R")
 
