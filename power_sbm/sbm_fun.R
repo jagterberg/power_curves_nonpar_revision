@@ -1,10 +1,11 @@
 power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
   
-  toreturns <- list()
-  for (epses in c(1:length(epsilons))) {
+  toreturns <- vector("list",length(epsilons))
+  
+  foreach (epses = c(1:length(epsilons))) %dopar% {
     eps <- epsilons[epses]
-    toreturns[[epses]] <- list()
-    for (vals in c(1:length(ns))) {
+    toreturns[[epses]] <- vector("list",length(ns))
+    foreach (vals = c(1:length(ns))) %dopar% {
       toreturns[[epses]][[vals]] <- list()
       n <- ns[vals]
       m <- n
@@ -22,10 +23,10 @@ power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
       for (iter in c(1:nsims)) {
         print(paste0("iter = ",iter, " of ",max(nsims)
                      ,", n = ",n," of ",max(ns),
-                     ", eps = ",eps," of ",max(epses)))
+                     ", eps = ",eps," of ",max(epsilons)))
         assignmentvector1 <- rmultinom(n,1,pis)
         assignmentvector2 <- rmultinom(m,1,pis)
-        Xtrue <- rho**t(assignmentvector1) %*% nus_true1
+        Xtrue <- rho*t(assignmentvector1) %*% nus_true1
         Ytrue <-  rho* t(assignmentvector2) %*% nus_true2
         P1 <- Xtrue %*%Ipq %*% t(Xtrue)
         P2 <- Ytrue %*% Ipq %*% t(Ytrue)
