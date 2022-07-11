@@ -1,0 +1,10 @@
+Loading required package: Matrix
+Loading required package: foreach
+Loading required package: doParallel
+Loading required package: iterators
+Loading required package: parallel
+Error in source("sbm_fun.R") : sbm_fun.R:19:44: unexpected '{'
+18:           toReturn <- rep(0,nsims)
+19:           vl <- foreach(iter = c(1:nsims)) {
+                                               ^
+Execution halted
