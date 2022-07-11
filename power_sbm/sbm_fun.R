@@ -34,7 +34,7 @@ power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
           
             Q <- align_matrices(Xhat,Yhat,lambda=.5,eps=.1,niter=20)
             Xnew <- Xhat %*% Q
-        
+            test <- nonpar.test(Xnew,Yhat,nsims=500)
             return(test)
           }
           return(vl)
