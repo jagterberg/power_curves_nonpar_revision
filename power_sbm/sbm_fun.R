@@ -1,8 +1,8 @@
 power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
   
-  toreturns <-   foreach (epses = c(1:length(epsilons))) %dopar% {
+  toreturns <-   foreach(epses = c(1:length(epsilons))) %dopar% {
       eps <- epsilons[epses]
-      toreturns_epses <- foreach (vals = c(1:length(ns))) %dopar% {
+      toreturns_epses <- foreach(vals = c(1:length(ns))) %dopar% {
           n <- ns[vals]
           m <- n
           B <- diag(a-b,d) + matrix(b,d,d)
@@ -16,7 +16,7 @@ power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
           sigma <- 1/2
           p <- 1
           toReturn <- rep(0,nsims)
-          vl <- foreach (iter = c(1:nsims)) {
+          vl <- foreach(iter = c(1:nsims)) {
             print(paste0("iter = ",iter, " of ",max(nsims)
                      ,", n = ",n," of ",max(ns),
                      ", eps = ",eps," of ",max(epsilons)))
