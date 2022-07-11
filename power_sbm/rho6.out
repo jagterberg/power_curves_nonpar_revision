@@ -3,7 +3,6 @@ Loading required package: foreach
 Loading required package: doParallel
 Loading required package: iterators
 Loading required package: parallel
-Error in { : 
-  task 1 failed - "task 1 failed - "task 1 failed - "object 'test' not found"""
-Calls: power_sbm_fun -> %dopar% -> <Anonymous>
+Error in unserialize(socklist[[n]]) : error reading from connection
+Calls: power_sbm_fun ... recvOneData -> recvOneData.SOCKcluster -> unserialize
 Execution halted
