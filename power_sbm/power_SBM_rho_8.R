@@ -24,7 +24,7 @@ a <- .4
 b <- .8
 nsims <- 200
 toreturns <- power_sbm_fun(472022,ns,epsilons,rho=.8,d,a,b,nsims)
-save(toreturns,file = "power_sbm_rho_8_7-7.Rdata")
+save(toreturns,file = "power_sbm_rho_8_7-11.Rdata")
 
 
 
