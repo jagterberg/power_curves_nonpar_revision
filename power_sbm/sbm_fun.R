@@ -16,7 +16,7 @@ power_sbm_fun <- function(seed,ns,epsilons,rho,d,a,b,nsims) {
           sigma <- 1/2
           p <- 1
           toReturn <- rep(0,nsims)
-          vl <- foreach(iter = c(1:nsims)) {
+          vl <- foreach(iter = c(1:nsims)) %dopar% {
             print(paste0("iter = ",iter, " of ",max(nsims)
                      ,", n = ",n," of ",max(ns),
                      ", eps = ",eps," of ",max(epsilons)))
