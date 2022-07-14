@@ -135,33 +135,33 @@ align_matrices <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100,toPrint = FALSE
   signs <- expand.grid(ds)
   obj.values1 <- rep(0,nrow(signs))
   obj.values2 <- rep(0,nrow(signs))
-  obj.values3 <- rep(0,nrow(signs))
+  #obj.values3 <- rep(0,nrow(signs))
   Q_news <- list()
-  Q_news2 <- list()
+  #Q_news2 <- list()
   for (allsigns in c(1:nrow(signs))) {
     obj.values1[allsigns] <- kernel.stat(Xhat %*% diag(signs[allsigns,]),Yhat)
     Qinit1 <- diag(signs[allsigns,])
     Qinit2 <- Qinit1[c(2:d),c(2:d)]
     Q_news[[allsigns]] <- OTP(Xhat[,c(2:d)],Yhat[,c(2:d)],Qinit =Qinit2,lambda=lambda,eps=eps,niter=niter)
     obj.values2[allsigns] <- kernel.stat(Xhat %*% bdiag(Qinit1[1,1],Q_news[[allsigns]]$Q),Yhat)
-    Q_news2[[allsigns]] <- OTP(Xhat,Yhat,Qinit = Qinit1,lambda=lambda,eps=eps,niter=niter)
-    Q_news2[[allsigns]] <- opq_project(Q_news2[[allsigns]]$Q)
-    obj.values3[allsigns] <- kernel.stat(Xhat %*% Q_news2[[allsigns]],Yhat)
+    #Q_news2[[allsigns]] <- OTP(Xhat,Yhat,Qinit = Qinit1,lambda=lambda,eps=eps,niter=niter)
+    #Q_news2[[allsigns]] <- opq_project(Q_news2[[allsigns]]$Q)
+    #obj.values3[allsigns] <- kernel.stat(Xhat %*% bdiag(Qinit1[1,1],Q_news[[allsigns]]$Q),Yhat)
     
   }
   
-  if (min(obj.values1) < min(obj.values2) & min(obj.values1) < min(obj.values3)) {
+  if (min(obj.values1) < min(obj.values2)) {# & min(obj.values1) < min(obj.values3)) {
     return(diag(signs[which.min(obj.values1),])) 
-  } else if (min(obj.values2) < min(obj.values3)) {
+  } else {#if (min(obj.values2) < min(obj.values3)) {
     minwhich <- which.min(obj.values2)
     q1 <- diag(signs[minwhich,])[1,1]
     Q2 <- Q_news[[minwhich]]$Q
     return(
       bdiag(q1,Q2)
     )
-  } else {
-    minwhich <- which.min(obj.values3)
-    return(Q_news2[[minwhich]])
-  }
+  } # else {
+   # minwhich <- which.min(obj.values3)
+    #return(Q_news2[[minwhich]])
+  #}
 
 }

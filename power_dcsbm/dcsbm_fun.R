@@ -1,10 +1,8 @@
 power_dcsbm_fun <-function(seed,ns,epsilons,rho,d,a,b,nsims) {
-  toreturns <- list()
-  for (epses in c(1:length(epsilons))) {
+  toreturns <-   foreach(epses = c(1:length(epsilons))) %dopar% {
     eps <- epsilons[epses]
-    toreturns[[epses]] <- list()
-    for (vals in c(1:length(ns))) {
-      toreturns[[epses]][[vals]] <- list()
+    toreturns_epses <- foreach(vals = c(1:length(ns))) %dopar% {
+      #toreturns[[epses]][[vals]] <- list()
       n <- ns[vals]
       m <- n
       B <- diag(a-b,d) + matrix(b,d,d)
@@ -19,7 +17,7 @@ power_dcsbm_fun <-function(seed,ns,epsilons,rho,d,a,b,nsims) {
       sigma <- 1/2
       p <- 1
       toReturn <- rep(0,nsims)
-      for (iter in c(1:nsims)) {
+      vl <- foreach(iter = c(1:nsims)) %dopar% {
         print(paste0("iter = ",iter, " of ",max(nsims)
                      ,", n = ",n," of ",max(ns),
                      ", eps = ",eps," of ",max(epsilons)))
@@ -42,11 +40,16 @@ power_dcsbm_fun <-function(seed,ns,epsilons,rho,d,a,b,nsims) {
         Q <- align_matrices(Xhat,Yhat,lambda=.5,eps=.1,niter=20)
         Xnew <- Xhat %*% Q
         #run test:
-        test <- nonpar.test(Xnew,Yhat,nsims=500)
-        toreturns[[epses]][[vals]][[iter]] <- test
+        test <- nonpar.test(Xnew,Yhat,nsims=100)
+        return(test)
+        #toreturns[[epses]][[vals]][[iter]] <- test
 
       }
+      return(vl)
     }
+    names(toreturns_epses) <- ns
+    return(toreturns_epses)
   }
+  names(toreturns) <- epsilons
   return(toreturns)
 }

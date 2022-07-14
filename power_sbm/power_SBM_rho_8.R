@@ -1,17 +1,6 @@
 source("../misc_functions/misc.R")
 source("../misc_functions/embed_and_align.R")
 source("../misc_functions/align.R")
-if(!require(foreach)) {
-  install.packages("foreach")
-  library(foreach)
-}
-if(!require(doParallel)) {
-  install.packages("doParallel")
-  library(doParallel)
-}
-numcores<- detectCores()
-cl <- makeCluster(4,type = "FORK")
-registerDoParallel(cl,numcores)
 source("sbm_fun.R")
 
 
@@ -24,18 +13,18 @@ a <- .4
 b <- .8
 nsims <- 200
 toreturns <- power_sbm_fun(472022,ns,epsilons,rho=.8,d,a,b,nsims)
-save(toreturns,file = "power_sbm_rho_8_7-11.Rdata")
+save(toreturns,file = "power_sbm_rho_8_7-14.Rdata")
 
 
-
-# load("power_sbm_rho_8_6-27.Rdata")
+# 
+# load("power_sbm_rho_8_7-11.Rdata")
 # ns <- seq(200,800,100)
 # epsilons <-  seq(0 ,.2,.1)
 # d <- 3
 # a <- .4
 # b <- .8
 # nsims <- 200
-# eps_n_matrix <- matrix(0,nrow=length(epsilons),ncol=length(ns)) 
+# eps_n_matrix <- matrix(0,nrow=length(epsilons),ncol=length(ns))
 # row.names(eps_n_matrix) <- epsilons
 # colnames(eps_n_matrix) <- ns
 # for(i in c(1:length(toreturns))) {
