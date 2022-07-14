@@ -12,7 +12,7 @@ toreturns <- list()
 d <- 3
 a <- .4
 b <- .8
-nsims <- 200
+nsims <- 100
 
 toreturns <- power_dcsbm_fun(6272022,ns,epsilons,rho=.6,d,a,b,nsims)
 

@@ -11,7 +11,7 @@ epsilons <- seq(0 ,.2,.1)
 d <- 3
 a <- .4
 b <- .8
-nsims <- 2
+nsims <- 100
 toreturns <- power_sbm_fun(472022,ns,epsilons,rho=1,d,a,b,nsims)
 save(toreturns,file = "power_sbm_rho_1_7-14.Rdata")
 
