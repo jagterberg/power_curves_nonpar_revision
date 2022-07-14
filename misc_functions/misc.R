@@ -1,14 +1,3 @@
-if(!require(foreach)) {
-  install.packages("foreach")
-  library(foreach)
-}
-if(!require(doParallel)) {
-  install.packages("doParallel")
-  library(doParallel)
-}
-numcores<- detectCores()
-cl <- makeCluster(4,type = "FORK")
-registerDoParallel(cl,numcores)
 
 
 

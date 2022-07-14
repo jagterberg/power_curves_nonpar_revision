@@ -1,3 +1,15 @@
+if(!require(foreach)) {
+  install.packages("foreach")
+  library(foreach)
+}
+if(!require(doParallel)) {
+  install.packages("doParallel")
+  library(doParallel)
+}
+numcores<- detectCores()
+cl <- makeCluster(4,type = "FORK")
+registerDoParallel(cl,numcores)
+
 power_dcsbm_fun <-function(seed,ns,epsilons,rho,d,a,b,nsims) {
   toreturns <-   foreach(epses = c(1:length(epsilons))) %dopar% {
     eps <- epsilons[epses]
