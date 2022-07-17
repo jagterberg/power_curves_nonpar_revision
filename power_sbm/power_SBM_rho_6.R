@@ -5,7 +5,7 @@ source("sbm_fun.R")
 
 
 set.seed(472022)
-ns <- seq(200,800,100)
+ns <- seq(200,600,100)
 epsilons <-  seq(0 ,.2,.1)
 #ns <- c(100,200)
 d <- 3
@@ -13,16 +13,16 @@ a <- .4
 b <- .8
 nsims <- 100
 toreturns <- power_sbm_fun(472022,ns,epsilons,rho=.6,d,a,b,nsims)
-save(toreturns,file = "power_sbm_rho_6_7-14.Rdata")
+save(toreturns,file = "power_sbm_rho_6_7-17.Rdata")
 
 
-# load("power_sbm_rho_6_7-11.Rdata")
-# ns <- seq(200,800,100)
+# load("power_sbm_rho_6_7-14.Rdata")
+# ns <- seq(200,800,200)
 # epsilons <-  seq(0 ,.2,.1)
 # d <- 3
 # a <- .4
 # b <- .8
-# nsims <- 200
+# nsims <- 100
 # eps_n_matrix <- matrix(0,nrow=length(epsilons),ncol=length(ns))
 # row.names(eps_n_matrix) <- epsilons
 # colnames(eps_n_matrix) <- ns
@@ -39,13 +39,3 @@ save(toreturns,file = "power_sbm_rho_6_7-14.Rdata")
 #  }
 # 
 # eps_n_matrix/nsims
-# # #
-# # #
-# # # power1_n1[[1]]
-# # #
-# # #
-# # # power1_n1$`estimated p-value`
-# # #
-# # #
-# # #
-# #

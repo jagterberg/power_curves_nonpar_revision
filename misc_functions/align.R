@@ -150,16 +150,16 @@ align_matrices <- function(Xhat,Yhat,lambda=.1,eps=.01,niter=100,toPrint = FALSE
     
   }
   
-  if (min(obj.values1) < min(obj.values2)) {# & min(obj.values1) < min(obj.values3)) {
-    return(diag(signs[which.min(obj.values1),])) 
-  } else {#if (min(obj.values2) < min(obj.values3)) {
+  #if (min(obj.values1) < min(obj.values2)) {# & min(obj.values1) < min(obj.values3)) {
+  #  return(diag(signs[which.min(obj.values1),])) 
+  #} else {#if (min(obj.values2) < min(obj.values3)) {
     minwhich <- which.min(obj.values2)
     q1 <- diag(signs[minwhich,])[1,1]
     Q2 <- Q_news[[minwhich]]$Q
     return(
       bdiag(q1,Q2)
     )
-  } # else {
+  #} # else {
    # minwhich <- which.min(obj.values3)
     #return(Q_news2[[minwhich]])
   #}
