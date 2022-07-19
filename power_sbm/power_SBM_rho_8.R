@@ -4,26 +4,27 @@ source("../misc_functions/align.R")
 source("sbm_fun.R")
 
 
-set.seed(472022)
-ns <-seq(200,600,100)
-epsilons <-  seq(0 ,.2,.1)
+set.seed(7192022)
+ns <- seq(200,800,100)
+epsilons <-  seq(0 ,.2,.05)
 #ns <- c(100,200)
 d <- 3
 a <- .4
 b <- .8
-nsims <- 100
+nsims <- 200
 toreturns <- power_sbm_fun(472022,ns,epsilons,rho=.8,d,a,b,nsims)
-save(toreturns,file = "power_sbm_rho_8_7-17.Rdata")
+save(toreturns,file = "power_sbm_rho_8_7-19.Rdata")
 
 
 # 
-# load("power_sbm_rho_8_7-11.Rdata")
-# ns <- seq(200,800,100)
+# load("power_sbm_rho_8_7-17.Rdata")
+# ns <-seq(200,600,100)
 # epsilons <-  seq(0 ,.2,.1)
+# #ns <- c(100,200)
 # d <- 3
 # a <- .4
 # b <- .8
-# nsims <- 200
+# nsims <- 100
 # eps_n_matrix <- matrix(0,nrow=length(epsilons),ncol=length(ns))
 # row.names(eps_n_matrix) <- epsilons
 # colnames(eps_n_matrix) <- ns
